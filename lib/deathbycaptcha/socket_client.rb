@@ -224,7 +224,7 @@ module DeathByCaptcha
       log('RECV', response.to_s)
       
       #Occasionally death by captcha returns invalid json without an enclosing }-tag.
-      #Example: {"status": 0, "is_correct": true, "text": "which crdgemen", "captcha": 49562848, "rate": 0.139, "user": 2047, "is_banned": false, "balance": 13762.251
+      #Example: {"status": 0, "is_correct": true, "text": "which crdgemen", "captcha": xxxxxxx, "rate": 0.139, "user": xxxx, "is_banned": false, "balance": 13762.251
       #Append a } to the end of the raw string if it isn't already present
       
       begin
