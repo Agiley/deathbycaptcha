@@ -223,7 +223,13 @@ module DeathByCaptcha
       
       log('RECV', response.to_s)
       
+      #Occasionally death by captcha returns invalid json without an enclosing }-tag.
+      #Example: {"status": 0, "is_correct": true, "text": "which crdgemen", "captcha": 49562848, "rate": 0.139, "user": 2047, "is_banned": false, "balance": 13762.251
+      #Append a } to the end of the raw string if it isn't already present
+      
       begin
+        response = response.to_s.strip
+        response += "}" unless response =~ /\}$/i
         response = JSON.load(response)
       rescue Exception => e
         raise Exception.new('Invalid API response')
