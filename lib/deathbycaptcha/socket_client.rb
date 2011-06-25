@@ -53,9 +53,9 @@ module DeathByCaptcha
     #
     protected
     
-    def upload(captcha, is_case_sensitive=false, is_raw_content=false)
+    def upload(captcha, is_case_sensitive=false, is_raw_content=false, proxy=nil)
       data = userpwd
-      data[:captcha] = Base64.encode64(load_file(captcha, is_raw_content).read)
+      data[:captcha] = Base64.encode64(load_file(captcha, is_raw_content, proxy).read)
       
       data[:is_case_sensitive] = is_case_sensitive ? 1 : 0
       response = call('upload', data)

@@ -159,7 +159,7 @@ module DeathByCaptcha
     # => a url if it's a String and starts with 'http://'
     # => a filesystem path otherwise
     #
-    def load_file(captcha, is_raw_content=false)
+    def load_file(captcha, is_raw_content=false, proxy=nil)
       file = nil
       if is_raw_content
         # Create a temporary file, write the raw content and return it
@@ -174,7 +174,9 @@ module DeathByCaptcha
       elsif captcha.kind_of? String and captcha =~ /^http(s)?:\/\//i
         # Create a temporary file, download the file, write it to tempfile and return it
         tmp_file_path = File.join(Dir.tmpdir, "captcha_#{Time.now.to_i}_#{rand}")
+        RestClient.proxy = proxy if (proxy && proxy.present? && proxy =~ /^http(s)?:\/\//i)
         File.open(tmp_file_path, 'wb') {|f| f.write RestClient.get(captcha)}
+        RestClient.proxy = nil if (proxy && proxy.present? && proxy =~ /^http(s)?:\/\//i)
         file = File.open(tmp_file_path, 'r')
         
       else
