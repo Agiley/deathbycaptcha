@@ -53,14 +53,14 @@ module DeathByCaptcha
     #
     protected
     
-    def upload(captcha, is_case_sensitive=false, is_raw_content=false, proxy=nil)
+    def upload(captcha, options={})
+      options = {:is_case_sensitive => false, :is_raw_content => false}.merge(options)
       data = userpwd
-      data[:captcha] = Base64.encode64(load_file(captcha, is_raw_content, proxy).read)
-      
-      data[:is_case_sensitive] = is_case_sensitive ? 1 : 0
+      data[:swid] = config.software_vendor_id
+      data[:is_case_sensitive] = options[:is_case_sensitive] ? 1 : 0
+      data[:captcha] = Base64.encode64(load_file(captcha, options[:is_raw_content], options[:proxy]).read)
       response = call('upload', data)
-      
-      response
+      return response
     end
     
     #
